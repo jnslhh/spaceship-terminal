@@ -23,6 +23,23 @@ RAW_BRAILLE_ART = r"""
 
 SHIP_ART = [line for line in RAW_BRAILLE_ART.splitlines() if line]
 
+# Dynamic change in the number of stars for the current screen area
+def adjust_stars(stars, max_y, max_x):
+    # new density
+    targetNumStars = int((max_y * max_x) * 0.025) # 100*24=2400(+-default value) 60(stars)/2400=0.0025
+
+    targetNumStars = max(10, targetNumStars)
+
+    while len(stars) < targetNumStars:
+        stars.append([
+            random.randint(1, max_y - 2),
+            random.randint(1, max_x - 2),
+            random.choice([1, 2, 3])
+        ])
+
+    while len(stars) > targetNumStars:
+        stars.pop()
+
 def main(stdscr):
     # hide cursor
     curses.curs_set(0)
@@ -34,13 +51,7 @@ def main(stdscr):
     
     # star: [y, x, speed]
     stars = []
-    num_stars = 60
-    for star in range(num_stars):
-        stars.append([
-            random.randint(1, max_y - 2),  # x
-            random.randint(1, max_x - 2),  # y
-            random.choice([1, 2, 3])       # speed
-        ])
+    adjust_stars(stars, max_y, max_x)
         
     # spaceship position
     ship_y = max_y // 2 - (len(SHIP_ART) // 2)
@@ -60,6 +71,8 @@ def main(stdscr):
             max_y, max_x = stdscr.getmaxyx() # update screen size
 
             ship_y = max_y // 2 - (len(SHIP_ART) // 2) # update the spaceship position
+
+            adjust_stars(stars, max_y, max_x)
 
         # 1. update star coordinates
         frame_count += 1
