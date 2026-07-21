@@ -52,7 +52,15 @@ def main(stdscr):
         key = stdscr.getch()
         if key == ord('q'):  # exit 'q'
             break
-            
+
+        # if the user resizes the window
+        elif key == curses.KEY_RESIZE:
+            curses.update_lines_cols() #update curses size
+
+            max_y, max_x = stdscr.getmaxyx() # update screen size
+
+            ship_y = max_y // 2 - (len(SHIP_ART) // 2) # update the spaceship position
+
         # 1. update star coordinates
         frame_count += 1
         for star in stars:
@@ -60,7 +68,7 @@ def main(stdscr):
                 star[1] -= 1
                 
             # if the star is behind the left edge
-            if star[1] <= 0:
+            if star[1] <= 0 or star[1] >= max_x or star[0] >= max_y:
                 star[1] = max_x - 2
                 star[0] = random.randint(1, max_y - 2)
                 star[2] = random.choice([1, 2, 3])
