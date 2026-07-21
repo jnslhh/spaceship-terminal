@@ -45,5 +45,4 @@ To build the package locally:
 makepkg -si
 ```
 
-## Legacy Python Code
-The original Python implementation has been moved to the [legacy/](file:///Users/andreyscherbakov/Documents/programming/python/spaceship/legacy) directory.
+
