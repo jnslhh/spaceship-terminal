@@ -59,29 +59,6 @@ sudo make uninstall PREFIX=/usr/local
 - Press `q` to exit.
 - Resize the terminal window to redraw the scene.
 
-## Arch Linux and AUR
-
-This repository includes a `PKGBUILD` for the release package `spaceship-terminal`.
-
-Build and install it locally with:
-
-```bash
-makepkg -si
-```
-
-The package installs the executable as:
-
-```text
-/usr/bin/spaceship
-```
-
-After changing `PKGBUILD` metadata, regenerate `.SRCINFO` before uploading to the AUR:
-
-```bash
-makepkg --printsrcinfo > .SRCINFO
-```
-
-For a final AUR release, replace the temporary `SKIP` checksum in `PKGBUILD` with the real SHA-256 checksum for the `v1.0.0` source archive after the tag exists.
 
 ## License
 
