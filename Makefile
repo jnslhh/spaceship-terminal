@@ -1,16 +1,38 @@
+ifeq ($(origin CXX),default)
 CXX = g++
-CXXFLAGS = -O3 -Wall -Wextra -std=c++17
+endif
+
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+
+CPPFLAGS ?=
+CXXSTD ?= -std=c++17
+CXXFLAGS ?= -O2 -Wall -Wextra
+LDFLAGS ?=
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-    LDFLAGS = -lncurses
+LDLIBS ?= -lncurses
 else
-    LDFLAGS = -lncursesw
+LDLIBS ?= -lncursesw
 endif
 
-spaceship: main.cpp
-	$(CXX) $(CXXFLAGS) -o spaceship main.cpp $(LDFLAGS)
+TARGET = spaceship
+SOURCES = main.cpp
+
+.PHONY: all clean install uninstall
+
+all: $(TARGET)
+
+$(TARGET): $(SOURCES)
+	$(CXX) $(CPPFLAGS) $(CXXSTD) $(CXXFLAGS) $(LDFLAGS) -o $@ $(SOURCES) $(LDLIBS)
+
+install: $(TARGET)
+	install -d "$(DESTDIR)$(BINDIR)"
+	install -m 755 $(TARGET) "$(DESTDIR)$(BINDIR)/$(TARGET)"
+
+uninstall:
+	rm -f "$(DESTDIR)$(BINDIR)/$(TARGET)"
 
 clean:
-	rm -f spaceship
-.PHONY: clean
+	rm -f $(TARGET)
